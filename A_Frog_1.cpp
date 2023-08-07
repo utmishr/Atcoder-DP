@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n;
+int a[100005];
+int dp[100005];
+
+int rec(int level)
+{
+    // pruning and base case
+    if (level >= n - 1) // once you come to level n-1 you can't go ahead and it return 0
+    {                   // remember the cost to come at n-1 will already calclated by h1-hj and rec(n-1) should return 0
+        return 0;
+    }
+
+    // check cache
+    if (dp[level] != -1)
+    {
+        return dp[level];
+    }
+
+    // compute
+    int ans = 1e9;
+
+    if (level + 1 < n)
+    {
+        ans = min(ans, rec(level + 1) + abs(a[level + 1] - a[level]));
+    }
+
+    if (level + 2 < n)
+    {
+        ans = min(ans, rec(level + 2) + abs(a[level + 2] - a[level]));
+    }
+
+    // save and return
+    return dp[level] = ans;
+}
+
+int main()
+{
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> a[i];
+    }
+    memset(dp, -1, sizeof(dp));
+    cout << rec(0);
+}
